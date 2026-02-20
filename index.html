@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>APavan_Quantitativo de Materiais — Alvenaria</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700;900&family=Barlow:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1f2937;
+    --border: #30363d;
+    --accent: #f0a500;
+    --accent2: #e05c00;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 0%, rgba(240,165,0,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(224,92,0,0.06) 0%, transparent 50%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .header-title small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .badge {
+    margin-left: auto;
+    background: rgba(240,165,0,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    min-height: calc(100vh - 72px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 1rem 0 0.6rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-title::before {
+    content: '';
+    width: 3px; height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+  .divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
+  .formula-chip {
+    display: inline-block;
+    background: rgba(240,165,0,0.08);
+    border: 1px dashed rgba(240,165,0,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-family: 'Barlow Condensed', monospace;
+    margin-bottom: 8px;
+  }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .input-wrap {
+    display: flex;
+    align-items: stretch;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .input-wrap:focus-within { border-color: var(--accent); }
+  .input-wrap input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 6px 8px;
+  }
+  .input-wrap .unit {
+    background: rgba(240,165,0,0.1);
+    color: var(--accent);
+    font-size: 0.62rem;
+    padding: 0 7px;
+    white-space: nowrap;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-left: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── MAIN ── */
+  .main { padding: 1.5rem; overflow-y: auto; }
+
+  /* ── SUMMARY BANNER ── */
+  .summary-banner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .sum-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sum-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .sum-card .s-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .sum-card .s-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .sum-card .s-unit { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 10px 20px;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── TAB PANELS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 10px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .card-body { padding: 10px 0; }
+
+  /* ── RESULT ROW ── */
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 14px;
+    transition: background 0.1s;
+  }
+  .result-row:hover { background: rgba(255,255,255,0.03); }
+  .result-row.highlight {
+    background: rgba(240,165,0,0.08);
+    border-left: 3px solid var(--accent);
+    padding-left: 11px;
+  }
+  .res-label { font-size: 0.78rem; color: var(--muted); }
+  .res-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: right;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+  .res-value em {
+    font-style: normal;
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-left: 3px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .summary-banner { grid-template-columns: 1fr 1fr; }
+    .tab-btn { padding: 10px 12px; font-size: 0.75rem; }
+  }
+  @media (max-width: 480px) {
+    .summary-banner { grid-template-columns: 1fr 1fr; }
+    header { padding: 0 1rem; }
+    .badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">🧱</div>
+  <div class="header-title">
+    APavan_Quantitativo de Materiais
+    <small>Paredes de Alvenaria · Calculadora Técnica</small>
+  </div>
+  <div class="badge">Engenharia Civil</div>
+</header>
+
+<div class="layout">
+
+  <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <aside class="sidebar">
+
+    <div class="section-title">Geometria da Parede</div>
+    <div class="grid3">
+      <div class="field">
+        <label>Comprimento</label>
+        <div class="input-wrap"><input type="number" step="any" id="P" value="21" /><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Altura</label>
+        <div class="input-wrap"><input type="number" step="any" id="Alt" value="3" /><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Esp. Parede</label>
+        <div class="input-wrap"><input type="number" step="any" id="Epar" value="0.14" /><span class="unit">m</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Tijolo (Área Frontal)</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Área c/ junta</label>
+        <div class="input-wrap"><input type="number" step="any" id="Tjla" value="0.05" /><span class="unit">m²</span></div>
+      </div>
+      <div class="field">
+        <label>Área s/ junta</label>
+        <div class="input-wrap"><input type="number" step="any" id="Tjlb" value="0.0456" /><span class="unit">m²</span></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <span class="formula-chip">Dimensões do tijolo (14×19×24)</span>
+    <div class="grid3" style="margin-top:6px">
+      <div class="field">
+        <label>a (comp.)</label>
+        <div class="input-wrap"><input type="number" step="any" id="a" value="24" /><span class="unit">cm</span></div>
+      </div>
+      <div class="field">
+        <label>b (larg.)</label>
+        <div class="input-wrap"><input type="number" step="any" id="b" value="19" /><span class="unit">cm</span></div>
+      </div>
+      <div class="field">
+        <label>c (esp.)</label>
+        <div class="input-wrap"><input type="number" step="any" id="c_dim" value="14" /><span class="unit">cm</span></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid2">
+      <div class="field">
+        <label>Peso / tijolo</label>
+        <div class="input-wrap"><input type="number" step="any" id="Ptj" value="4.2" /><span class="unit">kgf</span></div>
+      </div>
+      <div class="field">
+        <label>Esp. reboco</label>
+        <div class="input-wrap"><input type="number" step="any" id="ereb" value="0.025" /><span class="unit">m</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Argamassa</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Peso esp. arg.</label>
+        <div class="input-wrap"><input type="number" step="any" id="Pesoarg" value="1900" /><span class="unit">kg/m³</span></div>
+      </div>
+      <div class="field">
+        <label>Produt. HO/m²</label>
+        <div class="input-wrap"><input type="number" step="any" id="HOM2" value="18" /><span class="unit">hh/m²</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Traço (Cim : Cal : Areia)</div>
+    <div class="grid3">
+      <div class="field">
+        <label>Cimento</label>
+        <div class="input-wrap"><input type="number" step="any" id="traco_cim" value="1" /></div>
+      </div>
+      <div class="field">
+        <label>Cal</label>
+        <div class="input-wrap"><input type="number" step="any" id="traco_cal" value="2" /></div>
+      </div>
+      <div class="field">
+        <label>Areia</label>
+        <div class="input-wrap"><input type="number" step="any" id="traco_areia" value="8" /></div>
+      </div>
+    </div>
+
+    <div class="section-title">Densidades (kg/m³)</div>
+    <div class="grid2">
+      <div class="field">
+        <label>γ Cimento</label>
+        <div class="input-wrap"><input type="number" step="any" id="gamma_c" value="1200" /><span class="unit">kg/m³</span></div>
+      </div>
+      <div class="field">
+        <label>γ Cal</label>
+        <div class="input-wrap"><input type="number" step="any" id="gamma_cal" value="1700" /><span class="unit">kg/m³</span></div>
+      </div>
+      <div class="field">
+        <label>γ Areia Grossa</label>
+        <div class="input-wrap"><input type="number" step="any" id="gamma_areiaG" value="1700" /><span class="unit">kg/m³</span></div>
+      </div>
+      <div class="field">
+        <label>γ Areia Média</label>
+        <div class="input-wrap"><input type="number" step="any" id="gamma_areiaM" value="1500" /><span class="unit">kg/m³</span></div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="main">
+
+    <!-- Summary Banner -->
+    <div class="summary-banner">
+      <div class="sum-card">
+        <div class="s-label">Área da Parede</div>
+        <div class="s-value" id="s-area">—</div>
+        <div class="s-unit">m²</div>
+      </div>
+      <div class="sum-card">
+        <div class="s-label">Qtd. Tijolos</div>
+        <div class="s-value" id="s-tijolos">—</div>
+        <div class="s-unit">unidades</div>
+      </div>
+      <div class="sum-card">
+        <div class="s-label">Arg. Assentamento</div>
+        <div class="s-value" id="s-arg">—</div>
+        <div class="s-unit">m³</div>
+      </div>
+      <div class="sum-card">
+        <div class="s-label">Prod. Diária</div>
+        <div class="s-value" id="s-prod">—</div>
+        <div class="s-unit">jornadas/dia</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(0)">Parede &amp; Tijolos</button>
+      <button class="tab-btn" onclick="switchTab(1)">Argamassa &amp; Peso</button>
+      <button class="tab-btn" onclick="switchTab(2)">Traço e Materiais</button>
+    </div>
+
+    <!-- ── TAB 0: Parede & Tijolos ── -->
+    <div class="tab-panel active" id="panel-0">
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-header">📐 Geometria</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">Área da parede (A_par = P × Alt)</span><span class="res-value" id="r-Apar">—<em>m²</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">🧱 Tijolos — Método Área Frontal</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">Tj_t = A_par / Tj_la (c/ junta)</span><span class="res-value" id="r-Tjt">—<em>un</em></span></div>
+            <div class="result-row"><span class="res-label">Tj_lb1 = A_par / Tj_lb (s/ junta)</span><span class="res-value" id="r-Tjlb1">—<em>un</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">🧱 Tijolos — Método Dimensional</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">A_tjunta = (a+1cm)×(b+1cm)</span><span class="res-value" id="r-Atjunta">—<em>m²</em></span></div>
+            <div class="result-row"><span class="res-label">QTD_t = 1m² / A_tjunta</span><span class="res-value" id="r-QTDt">—<em>tj/m²</em></span></div>
+            <div class="result-row highlight"><span class="res-label">Total_t = A_par × QTD_t</span><span class="res-value" id="r-Totalt">—<em>un</em></span></div>
+            <div class="result-row"><span class="res-label">A_semjunta = a × b</span><span class="res-value" id="r-Atsemjunta">—<em>m²</em></span></div>
+            <div class="result-row"><span class="res-label">A_totalt = QTD_t × A_semjunta</span><span class="res-value" id="r-Atotalt">—<em>m²/m²</em></span></div>
+            <div class="result-row"><span class="res-label">A_junta = 1 − A_totalt</span><span class="res-value" id="r-Ajunta">—<em>m²/m²</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">📊 Reboco</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">R_bc = A_par × e_reb (1 face)</span><span class="res-value" id="r-Rbc">—<em>m³</em></span></div>
+            <div class="result-row highlight"><span class="res-label">R_bc2 = A_par × e_reb × 2 (2 faces)</span><span class="res-value" id="r-Rbc2">—<em>m³</em></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── TAB 1: Argamassa & Peso ── -->
+    <div class="tab-panel" id="panel-1">
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-header">🪣 Volume de Argamassa</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">V_argamassa = A_junta × c (por m²)</span><span class="res-value" id="r-Vargamassa">—<em>m³/m²</em></span></div>
+            <div class="result-row highlight"><span class="res-label">V_argassentam = A_par × V_argamassa</span><span class="res-value" id="r-Vargassentam">—<em>m³</em></span></div>
+            <div class="result-row"><span class="res-label">ARG (juntas horiz. + vert.)</span><span class="res-value" id="r-ARG">—<em>m³/tj</em></span></div>
+            <div class="result-row"><span class="res-label">A_arg1 = ARG × Tj_t</span><span class="res-value" id="r-Aarg1">—<em>m³</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">⚖️ Peso Total da Parede</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">Peso tijolos (Tj_t × P_tj)</span><span class="res-value" id="r-Pesotij">—<em>kgf</em></span></div>
+            <div class="result-row"><span class="res-label">Peso arg. assentamento</span><span class="res-value" id="r-Aarg2">—<em>kgf</em></span></div>
+            <div class="result-row"><span class="res-label">Peso reboco+arg. (2 faces)</span><span class="res-value" id="r-Pesopar">—<em>kgf</em></span></div>
+            <div class="result-row"><span class="res-label">TOTAL sem reboco</span><span class="res-value" id="r-Totalsemrb">—<em>kgf</em></span></div>
+            <div class="result-row highlight"><span class="res-label">TOTAL com reboco</span><span class="res-value" id="r-Totalcomrb">—<em>kgf</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">👷 Produtividade</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">Área total</span><span class="res-value" id="r-Apar2">—<em>m²</em></span></div>
+            <div class="result-row"><span class="res-label">Produtividade</span><span class="res-value" id="r-HOM2">—<em>hh/m²</em></span></div>
+            <div class="result-row highlight"><span class="res-label">QTA_dia = A_par / HO_m²</span><span class="res-value" id="r-QTADIA">—<em>jornadas</em></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── TAB 2: Traço e Materiais ── -->
+    <div class="tab-panel" id="panel-2">
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-header" id="r-traco-header">🔢 Traço 1:2:8</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">V_argassentam (total)</span><span class="res-value" id="r-Varg2">—<em>m³</em></span></div>
+            <div class="result-row"><span class="res-label" id="r-soma-label">Soma do traço (11 partes)</span><span class="res-value" id="r-soma">—<em>partes</em></span></div>
+            <div class="result-row highlight"><span class="res-label">Vol. Cimento = V_arg / Σtraço</span><span class="res-value" id="r-Volumecim">—<em>m³</em></span></div>
+            <div class="result-row"><span class="res-label" id="r-vcal-label">Vol. Cal = V_cim × 2</span><span class="res-value" id="r-Vcal">—<em>m³</em></span></div>
+            <div class="result-row"><span class="res-label" id="r-vareia-label">Vol. Areia = V_cim × 8</span><span class="res-value" id="r-Vareia">—<em>m³</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">⚖️ Peso dos Materiais</div>
+          <div class="card-body">
+            <div class="result-row highlight"><span class="res-label">Peso Cimento</span><span class="res-value" id="r-Pesocim">—<em>kg</em></span></div>
+            <div class="result-row highlight"><span class="res-label">Peso Cal</span><span class="res-value" id="r-Pesocal">—<em>kg</em></span></div>
+            <div class="result-row highlight"><span class="res-label">Peso Areia Grossa</span><span class="res-value" id="r-PesoareiaG">—<em>kg</em></span></div>
+            <div class="result-row"><span class="res-label">Total materiais argamassa</span><span class="res-value" id="r-TotalMat">—<em>kg</em></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">📋 Resumo por m²</div>
+          <div class="card-body">
+            <div class="result-row"><span class="res-label">Cimento / m²</span><span class="res-value" id="r-cim_m2">—<em>kg/m²</em></span></div>
+            <div class="result-row"><span class="res-label">Cal / m²</span><span class="res-value" id="r-cal_m2">—<em>kg/m²</em></span></div>
+            <div class="result-row"><span class="res-label">Areia / m²</span><span class="res-value" id="r-areia_m2">—<em>kg/m²</em></span></div>
+            <div class="result-row"><span class="res-label">Tijolos / m²</span><span class="res-value" id="r-tj_m2">—<em>un/m²</em></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ──────────────────────────────────────────
+  //  HELPERS
+  // ──────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const fmt = (v, dec = 3) => (isNaN(v) || v === null) ? '—' : Number(v).toFixed(dec);
+
+  function setVal(id, value, dec, unit) {
+    const el = $(id);
+    if (!el) return;
+    el.innerHTML = fmt(value, dec) + (unit ? `<em>${unit}</em>` : '');
+  }
+
+  // ──────────────────────────────────────────
+  //  CALC
+  // ──────────────────────────────────────────
+  function calcular() {
+    const v = id => parseFloat($(id).value) || 0;
+
+    const P       = v('P');
+    const Alt     = v('Alt');
+    const Epar    = v('Epar');
+    const Tjla    = v('Tjla');
+    const Tjlb    = v('Tjlb');
+    const Ptj     = v('Ptj');
+    const ereb    = v('ereb');
+    const Pesoarg = v('Pesoarg');
+    const HOM2    = v('HOM2');
+    const a       = v('a') / 100;   // cm → m
+    const b       = v('b') / 100;
+    const c       = v('c_dim') / 100;
+    const tc      = v('traco_cim');
+    const tca     = v('traco_cal');
+    const tar     = v('traco_areia');
+    const gc      = v('gamma_c');
+    const gcal    = v('gamma_cal');
+    const gag     = v('gamma_areiaG');
+
+    // Área
+    const Apar = P * Alt;
+
+    // Tijolos - método área frontal
+    const Tjt   = Apar / Tjla;
+    const Tjlb1 = Apar / Tjlb;
+
+    // Reboco
+    const Rbc  = Apar * ereb;
+    const Rbc2 = Apar * ereb * 2;
+
+    // Argamassa assentamento - juntas
+    const ARG   = (Epar * 0.24 * 0.012) + (Epar * 0.19 * 0.012);
+    const Aarg1 = ARG * Tjt;
+    const Aarg2 = Aarg1 * Pesoarg;
+
+    // Pesos
+    const Pesotij    = Tjt * Ptj;
+    const Pesopar    = (Rbc2 + Aarg1) * Pesoarg;
+    const Totalsemrb = Pesotij + Aarg2;
+    const Totalcomrb = Pesotij + Pesopar;
+
+    // Produtividade
+    const QTADIA = Apar / HOM2;
+
+    // Método dimensional
+    const Atjunta    = (a + 0.01) * (b + 0.01);
+    const QTDt       = 1 / Atjunta;
+    const Totalt     = Apar * QTDt;
+    const Atsemjunta = a * b;
+    const Atotalt    = QTDt * Atsemjunta;
+    const Ajunta     = 1 - Atotalt;
+    const Vargamassa = Ajunta * c;
+    const Vargassentam = Apar * Vargamassa;
+
+    // Traço
+    const soma     = tc + tca + tar;
+    const Volumecim = Vargassentam / soma;
+    const Pesocim   = gc   * Volumecim;
+    const Pesocal   = gcal * Volumecim * tca;
+    const PesoareiaG = gag * Volumecim * tar;
+
+    // ── UPDATE DOM ──────────────────────────
+
+    // Summary
+    $('s-area').textContent    = fmt(Apar, 2);
+    $('s-tijolos').textContent = Math.ceil(Totalt);
+    $('s-arg').textContent     = fmt(Vargassentam, 3);
+    $('s-prod').textContent    = fmt(QTADIA, 1);
+
+    // Tab 0
+    setVal('r-Apar',      Apar,       3, 'm²');
+    setVal('r-Tjt',       Tjt,        0, 'un');
+    setVal('r-Tjlb1',     Tjlb1,      0, 'un');
+    setVal('r-Atjunta',   Atjunta,    4, 'm²');
+    setVal('r-QTDt',      QTDt,       2, 'tj/m²');
+    setVal('r-Totalt',    Totalt,     0, 'un');
+    setVal('r-Atsemjunta',Atsemjunta, 4, 'm²');
+    setVal('r-Atotalt',   Atotalt,    4, 'm²/m²');
+    setVal('r-Ajunta',    Ajunta,     4, 'm²/m²');
+    setVal('r-Rbc',       Rbc,        3, 'm³');
+    setVal('r-Rbc2',      Rbc2,       3, 'm³');
+
+    // Tab 1
+    setVal('r-Vargamassa',  Vargamassa,  5, 'm³/m²');
+    setVal('r-Vargassentam',Vargassentam,4, 'm³');
+    setVal('r-ARG',         ARG,         6, 'm³/tj');
+    setVal('r-Aarg1',       Aarg1,       4, 'm³');
+    setVal('r-Pesotij',     Pesotij,     1, 'kgf');
+    setVal('r-Aarg2',       Aarg2,       1, 'kgf');
+    setVal('r-Pesopar',     Pesopar,     1, 'kgf');
+    setVal('r-Totalsemrb',  Totalsemrb,  1, 'kgf');
+    setVal('r-Totalcomrb',  Totalcomrb,  1, 'kgf');
+    setVal('r-Apar2',       Apar,        2, 'm²');
+    $('r-HOM2').innerHTML   = fmt(HOM2, 1) + '<em>hh/m²</em>';
+    setVal('r-QTADIA',      QTADIA,      2, 'jornadas');
+
+    // Tab 2
+    $('r-traco-header').textContent = `🔢 Traço ${tc}:${tca}:${tar}`;
+    $('r-soma-label').textContent   = `Soma do traço (${soma} partes)`;
+    $('r-vcal-label').textContent   = `Vol. Cal = V_cim × ${tca}`;
+    $('r-vareia-label').textContent = `Vol. Areia = V_cim × ${tar}`;
+    setVal('r-Varg2',     Vargassentam,     4, 'm³');
+    $('r-soma').innerHTML = soma + '<em>partes</em>';
+    setVal('r-Volumecim', Volumecim,         4, 'm³');
+    setVal('r-Vcal',      Volumecim * tca,   4, 'm³');
+    setVal('r-Vareia',    Volumecim * tar,   4, 'm³');
+    setVal('r-Pesocim',   Pesocim,           2, 'kg');
+    setVal('r-Pesocal',   Pesocal,           2, 'kg');
+    setVal('r-PesoareiaG',PesoareiaG,        2, 'kg');
+    setVal('r-TotalMat',  Pesocim + Pesocal + PesoareiaG, 2, 'kg');
+    setVal('r-cim_m2',    Pesocim   / Apar,  3, 'kg/m²');
+    setVal('r-cal_m2',    Pesocal   / Apar,  3, 'kg/m²');
+    setVal('r-areia_m2',  PesoareiaG/ Apar,  3, 'kg/m²');
+    setVal('r-tj_m2',     QTDt,              1, 'un/m²');
+  }
+
+  // ──────────────────────────────────────────
+  //  TABS
+  // ──────────────────────────────────────────
+  function switchTab(idx) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) =>
+      btn.classList.toggle('active', i === idx));
+    document.querySelectorAll('.tab-panel').forEach((panel, i) =>
+      panel.classList.toggle('active', i === idx));
+  }
+
+  // ──────────────────────────────────────────
+  //  EVENTS
+  // ──────────────────────────────────────────
+  document.querySelectorAll('input[type="number"]').forEach(inp =>
+    inp.addEventListener('input', calcular));
+
+  // Initial render
+  calcular();
+</script>
+</body>
+</html>
